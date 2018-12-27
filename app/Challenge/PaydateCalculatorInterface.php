@@ -16,7 +16,7 @@ interface PaydateCalculatorInterface
      *
      * @return array the next paydates (from today) as strings in Y-m-d format
      */
-    public function calculateNextPaydates($paydateModel, $paydateOne, $numberOfPaydates);
+    public function calculateNextPaydates($paydateModel, $paydateOne, $numberOfPaydates);//: array;
 
     /**
      * determines whether a given date in Y-m-d format is a holiday.
@@ -25,7 +25,7 @@ interface PaydateCalculatorInterface
      *
      * @return bool whether or not the given date is on a holiday
      */
-    public function isHoliday($date): bool;
+    public function isHoliday($date);//: bool;
 
     /**
      * determines whether a given date in Y-m-d format is on a weekend.

@@ -14,7 +14,7 @@ class PayDateCalculator implements PaydateCalculatorInterface
         "17-02-".date("Y")."","26-05-".date("Y")."",
         "04-07-".date("Y")."","01-09-".date("Y")."","13-10-".date("Y")."","11-11-".date("Y")."",
         "27-11-".date("Y")."","25-12-".date("Y")."","01-01-".date("Y",strtotime('+1 years'))."",
-        "19-01-".date("Y",strtotime('+1 years'))."",
+        "14-01-".date("Y",strtotime('+1 years'))."",
         "16-02-".date("Y",strtotime('+1 years'))."","25-05-".date("Y",strtotime('+1 years'))."",
         "03-07-".date("Y",strtotime('+1 years'))."","07-09-".date("Y",strtotime('+1 years'))."",
         "12-10-".date("Y",strtotime('+1 years'))."","11-11-".date("Y",strtotime('+1 years'))."",
@@ -24,21 +24,42 @@ class PayDateCalculator implements PaydateCalculatorInterface
     
 
 
-    // ex : weekly, dateinput , 6
+   
     public function calculateNextPaydates($paydateModel, $paydateOne, $numberOfPaydates)
     {
         if($this->isValidDate($paydateOne) && $this->isValidPaydate($paydateOne))
             {
-                $validPaydateOne = $this->getFirstPaydateAfter($paydateOne);
-                return array(
-                    'response' => " valid date",
-                    'newdate' => $validPaydateOne,
-                );
+                $firstPaydateOne = $this->getFirstPaydateAfter($paydateOne);
+                $dates_list = [];
+                $current_date = $firstPaydateOne;
+                for($counter =1; $counter <= $numberOfPaydates; $counter++)
+                {
+                     $next_date =$this->increaseDate($current_date, $counter*($this->checkPayDateModel($paydateModel)),'days');
+                     array_push($dates_list,$this->getFirstPaydateAfter($next_date));
+                }
+                return $dates_list;
             }
             else 
             {
                 return array('response' => "Not a valid date" );
             }
+    }
+
+    public function checkPayDateModel($paydateModel)
+    {
+        switch ($paydateModel) {
+            case "MONTHLY":
+                return 30;
+                break;
+            case "BIWEEKLY":
+                return 14;
+                break;
+            case "WEEKLY":
+                return 7;
+                break;
+            default:
+                return 7;
+        }
     }
 
     public function getFirstPaydateAfter($paydateOne)
@@ -127,9 +148,6 @@ class PayDateCalculator implements PaydateCalculatorInterface
         }
         return false;
     }
-    // public function getFirstPaydateAfter($date)
-    // {
-
-    // }
+ 
     
 }
